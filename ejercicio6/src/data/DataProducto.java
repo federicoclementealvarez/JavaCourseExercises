@@ -81,4 +81,87 @@ public class DataProducto {
 		return(prodFound);
 	}
 	
+	
+	public Producto nuevo(Producto prod) {
+		//Producto prodNew = null;
+		PreparedStatement stmt = null;
+		ResultSet  keyRS = null;
+		try {
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("INSERT INTO productos(name, description, price, stock, shippingIncluded) VALUES (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, prod.getName());
+			stmt.setString(2, prod.getDescription());
+			stmt.setDouble(3, prod.getPrice());
+			stmt.setInt(4, prod.getStock());
+			stmt.setBoolean(5, prod.isShippingIncluded());
+			stmt.executeUpdate();
+			keyRS=stmt.getGeneratedKeys();
+			
+			if (keyRS!=null && keyRS.next()) {
+				prod.setId(keyRS.getInt(1));
+			}
+		}
+		catch (SQLException ex) {
+			ex.getStackTrace();
+		}
+		finally {
+			try {
+				if(keyRS!=null) {keyRS.close();}
+				if(stmt!=null) {stmt.close();}
+				DbConnector.getInstancia().releaseConn();
+			}
+			catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		return(prod);
+	}
+	
+	
+	public void delete(Producto prod) {
+		PreparedStatement stmt = null;
+		try {
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("DELETE FROM productos WHERE id = ?");
+			stmt.setInt(1, prod.getId());
+			stmt.executeUpdate();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			try {
+				if(stmt!=null) {stmt.close();}
+				DbConnector.getInstancia().releaseConn();
+			}
+			catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	public void update(Producto prod) {
+		PreparedStatement stmt = null;
+		try {
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("UPDATE productos SET name=?, description=?, price=?, stock=?, shippingIncluded=? WHERE id=?");
+			stmt.setString(1, prod.getName());
+			stmt.setString(2, prod.getDescription());
+			stmt.setDouble(3, prod.getPrice());
+			stmt.setInt(4, prod.getStock());
+			stmt.setBoolean(5, prod.isShippingIncluded());
+			stmt.setInt(6,prod.getId());
+			stmt.executeUpdate();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			try {
+				if(stmt!=null) {stmt.close();}
+				DbConnector.getInstancia().releaseConn();
+			}
+			catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
 }

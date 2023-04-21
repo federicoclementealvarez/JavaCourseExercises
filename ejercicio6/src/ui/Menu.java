@@ -1,6 +1,7 @@
 package ui;
 
 import java.util.Scanner;
+import java.util.LinkedList;
 import entities.*;
 import logic.*;
 
@@ -41,20 +42,20 @@ public class Menu {
 		switch (opcion) {
 			
 			case "list":
-				System.out.println(this.list());
+				System.out.println(this.list().toString());
 				break;
 			case "search":
-				System.out.println(this.search());
+				System.out.println(this.search().toString());
 				break;
-			/*case "new":
-				System.out.println(this.nuevo());
+			case "new":
+				System.out.println(this.nuevo().toString());
 				break;
 			case "delete":
 				System.out.println(this.delete());
 				break;
 			case "update":
 				System.out.println(this.update());
-				break;*/
+				break;
 		}	
 		System.out.println();
 		System.out.println("Oprima <<ENTER>> para continuar:");
@@ -66,14 +67,65 @@ public class Menu {
 
 	}
 	
-	private String list() {
-		return(instLogin.list().toString());
+	private LinkedList<Producto> list() {
+		return(instLogin.list());
 	}
 	
-	private String search() {
+	private Producto search() {
 		Producto prod = new Producto();
 		System.out.println("Ingrese ID del producto: ");
 		prod.setId (Integer.parseInt(lector.nextLine()));
-		return(instLogin.search(prod).toString());
+		return(instLogin.search(prod));
+	}
+	
+	private Producto nuevo() {
+		Producto prod = new Producto();
+		prod = cargarDatos();
+		return(instLogin.nuevo(prod));
+	}
+	
+	private String delete() {
+		Producto prod = new Producto();
+		System.out.println("Ingrese el ID del producto a eliminar:");
+		prod.setId(Integer.parseInt(lector.nextLine()));
+		instLogin.delete(prod);
+		return ("El registro se ha eliminado exitosamente");
+	}
+	
+	private String update() {
+		Producto prod = new Producto();
+		int ID;
+		prod=this.search();
+		System.out.println(prod.toString());
+		ID = prod.getId();
+		//System.out.println("Pasó");
+		prod = cargarDatos();
+		prod.setId(ID);
+		instLogin.update(prod);
+		return("Registro actualizado existosamente");
+	}
+	
+	private Producto cargarDatos(){
+		Producto prod = new Producto();
+		String selection;
+		boolean shipping;
+		System.out.println("Ingrese nombre del producto: ");
+		prod.setName (lector.nextLine());
+		System.out.println("Ingrese descripción del producto: ");
+		prod.setDescription (lector.nextLine());
+		System.out.println("Ingrese precio del producto: ");
+		prod.setPrice (Double.parseDouble(lector.nextLine()));
+		System.out.println("Ingrese stock del producto: ");
+		prod.setStock (Integer.parseInt(lector.nextLine()));
+		System.out.println("¿Incluye envío? S/N: ");
+		selection=lector.nextLine();
+		if (selection.equalsIgnoreCase("S")) {
+			shipping=true;
+		}
+		else {
+			shipping=false;
+		}
+		prod.setShippingIncluded(shipping);
+		return(prod);
 	}
 }

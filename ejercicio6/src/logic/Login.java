@@ -19,4 +19,16 @@ public class Login {
 	public Producto search (Producto prod) {
 		return (datap.search(prod));
 	}
+	
+	public Producto nuevo(Producto prod) {
+		return (datap.nuevo(prod));
+	}
+	
+	public void delete(Producto prod) {
+		datap.delete(prod);
+	}
+	
+	public void update(Producto prod) {
+		datap.update(prod);
+	}
 }
