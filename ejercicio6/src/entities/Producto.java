@@ -1,8 +1,8 @@
 package entities;
 
-/*import java.sql.*;
-import data.*;
-import java.util.LinkedList;*/
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+
 
 public class Producto{
 
@@ -12,6 +12,16 @@ public class Producto{
 	private double price;
 	private int stock;
 	private boolean shippingIncluded;
+	private LocalDateTime disabledOn;
+	
+	public LocalDateTime getDisabledOn() {
+		return disabledOn;
+	}
+
+	public void setDisabledOn(LocalDateTime disabledOn) {
+		this.disabledOn = disabledOn;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -51,7 +61,15 @@ public class Producto{
 	}
 	
 	public String toString() {
-		return("Producto: [id: "+this.getId()+", nombre: "+this.getName()+", descrición: "+this.getDescription()+", precio: "+this.getPrice()+", stock: "+this.getStock()+", ¿envío incluído?: "+this.isShippingIncluded()+"]");
+		String dateFormat = "dd/MM/yyyy";
+		String timeFormat = "HH:mm:ss";
+		String dateTimeFormat = dateFormat+" "+timeFormat;
+		DateTimeFormatter format = DateTimeFormatter.ofPattern(dateTimeFormat);
+		return("Producto: [id: "+this.getId()+", nombre: "+this.getName()+", descrición: "+this.getDescription()+", precio: "+this.getPrice()+", stock: "+this.getStock()+", ¿envío incluído?: "+this.isShippingIncluded()+", disabled on: "+((disabledOn==null)?null:disabledOn.format(format))+"]\n");
 	}
 	
+	
+	/*DateTimeFormatter format = DateTimeFormatter.ofPattern(dateTimeFormat);
+	System.out.println("Ingrese la fecha y hora del disabledOn ("+dateTimeFormat+"): ");
+	prod.setDisabledOn(LocalDateTime.parse(lector.nextLine(), format));*/
 }

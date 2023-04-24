@@ -4,12 +4,18 @@ import java.util.Scanner;
 import java.util.LinkedList;
 import entities.*;
 import logic.*;
+import java.time.*
+;
+import java.time.format.DateTimeFormatter;
 
 
 public class Menu {
 
-	Scanner lector = null;
-	Login instLogin = new Login();
+	private Scanner lector = null;
+	private Login instLogin = new Login();
+	private String dateFormat = "dd/MM/yyyy";
+	private String timeFormat = "HH:mm:ss";
+	private String dateTimeFormat = dateFormat+" "+timeFormat;
 	
 	public void start(){
 		String opcion;
@@ -126,6 +132,9 @@ public class Menu {
 			shipping=false;
 		}
 		prod.setShippingIncluded(shipping);
+		DateTimeFormatter format = DateTimeFormatter.ofPattern(dateTimeFormat);
+		System.out.println("Ingrese la fecha y hora del disabledOn ("+dateTimeFormat+"): ");
+		prod.setDisabledOn(LocalDateTime.parse(lector.nextLine(), format));
 		return(prod);
 	}
 }
