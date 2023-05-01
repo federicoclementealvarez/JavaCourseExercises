@@ -135,6 +135,8 @@ public class Menu {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(dateTimeFormat);
 		System.out.println("Ingrese la fecha y hora del disabledOn ("+dateTimeFormat+"): ");
 		prod.setDisabledOn(LocalDateTime.parse(lector.nextLine(), format));
+		System.out.println("Ingrese la fecha y hora del disabledOnZoned ("+dateTimeFormat+"): ");
+		prod.setDisabledOnZoned(ZonedDateTime.parse(lector.nextLine(), format.withZone(ZoneId.of("UTC-3"))));
 		return(prod);
 	}
 }

@@ -13,7 +13,17 @@ public class Producto{
 	private int stock;
 	private boolean shippingIncluded;
 	private LocalDateTime disabledOn;
+	private ZonedDateTime disabledOnZoned;
 	
+	
+	public ZonedDateTime getDisabledOnZoned() {
+		return disabledOnZoned;
+	}
+
+	public void setDisabledOnZoned(ZonedDateTime disabledOnZoned) {
+		this.disabledOnZoned = disabledOnZoned;
+	}
+
 	public LocalDateTime getDisabledOn() {
 		return disabledOn;
 	}
@@ -65,7 +75,9 @@ public class Producto{
 		String timeFormat = "HH:mm:ss";
 		String dateTimeFormat = dateFormat+" "+timeFormat;
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(dateTimeFormat);
-		return("Producto: [id: "+this.getId()+", nombre: "+this.getName()+", descrición: "+this.getDescription()+", precio: "+this.getPrice()+", stock: "+this.getStock()+", ¿envío incluído?: "+this.isShippingIncluded()+", disabled on: "+((disabledOn==null)?null:disabledOn.format(format))+"]\n");
+		return("Producto: [id: "+this.getId()+", nombre: "+this.getName()+", descrición: "+this.getDescription()+", precio: "+this.getPrice()+", stock: "+this.getStock()+
+				", ¿envío incluído?: "+this.isShippingIncluded()+", disabled on: "+((disabledOn==null)?null:disabledOn.format(format))+
+				", disabled on zoned: "+((disabledOnZoned==null)?null:disabledOnZoned.format(format.withZone(ZoneId.of("UTC+8"))))+"]\n");
 	}
 	
 	

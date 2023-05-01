@@ -15,7 +15,7 @@ public class DataProducto {
 		
 		try {
 			stmt= DbConnector.getInstancia().getConn().createStatement();
-			rs = stmt.executeQuery("Select id,name,description,price,stock,shippingIncluded,disabledOn from productos");
+			rs = stmt.executeQuery("Select id,name,description,price,stock,shippingIncluded,disabledOn,disabledOnZoned from productos");
 			if (rs!=null) {
 				while (rs.next()) {
 					Producto prod = new Producto();
@@ -26,6 +26,7 @@ public class DataProducto {
 					prod.setStock(rs.getInt("stock"));
 					prod.setShippingIncluded(rs.getBoolean("shippingIncluded"));
 					prod.setDisabledOn(rs.getObject(("disabledOn"),LocalDateTime.class));
+					prod.setDisabledOnZoned(rs.getObject(("disabledOnZoned"),ZonedDateTime.class));
 					productos.add(prod);
 				}
 			}
@@ -54,7 +55,7 @@ public class DataProducto {
 		ResultSet rs = null;
 		Producto prodFound = null;
 		try {
-			stmt= DbConnector.getInstancia().getConn().prepareStatement("Select id,name,description,price,stock,shippingIncluded,disabledOn from productos where id=?");
+			stmt= DbConnector.getInstancia().getConn().prepareStatement("Select id,name,description,price,stock,shippingIncluded,disabledOn,disabledOnZoned from productos where id=?");
 			stmt.setInt(1,prod.getId());
 			rs = stmt.executeQuery();
 			if (rs!=null && rs.next()) {
@@ -66,6 +67,7 @@ public class DataProducto {
 				prodFound.setStock(rs.getInt("stock"));
 				prodFound.setShippingIncluded(rs.getBoolean("shippingIncluded"));
 				prodFound.setDisabledOn(rs.getObject(("disabledOn"),LocalDateTime.class));
+				prodFound.setDisabledOnZoned(rs.getObject(("disabledOnZoned"),ZonedDateTime.class));
 			}
 		}
 		catch (SQLException ex){
@@ -91,13 +93,14 @@ public class DataProducto {
 		PreparedStatement stmt = null;
 		ResultSet  keyRS = null;
 		try {
-			stmt = DbConnector.getInstancia().getConn().prepareStatement("INSERT INTO productos(name, description, price, stock, shippingIncluded, disabledOn) VALUES (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("INSERT INTO productos(name, description, price, stock, shippingIncluded, disabledOn, disabledOnZoned) VALUES (?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, prod.getName());
 			stmt.setString(2, prod.getDescription());
 			stmt.setDouble(3, prod.getPrice());
 			stmt.setInt(4, prod.getStock());
 			stmt.setBoolean(5, prod.isShippingIncluded());
 			stmt.setObject(6, prod.getDisabledOn());
+			stmt.setObject(7, prod.getDisabledOnZoned());
 			stmt.executeUpdate();
 			keyRS=stmt.getGeneratedKeys();
 			
@@ -147,14 +150,15 @@ public class DataProducto {
 	public void update(Producto prod) {
 		PreparedStatement stmt = null;
 		try {
-			stmt = DbConnector.getInstancia().getConn().prepareStatement("UPDATE productos SET name=?, description=?, price=?, stock=?, shippingIncluded=?, disabledOn=? WHERE id=?");
+			stmt = DbConnector.getInstancia().getConn().prepareStatement("UPDATE productos SET name=?, description=?, price=?, stock=?, shippingIncluded=?, disabledOn=?, disabledOnZoned=?  WHERE id=?");
 			stmt.setString(1, prod.getName());
 			stmt.setString(2, prod.getDescription());
 			stmt.setDouble(3, prod.getPrice());
 			stmt.setInt(4, prod.getStock());
 			stmt.setBoolean(5, prod.isShippingIncluded());
 			stmt.setObject(6, prod.getDisabledOn());
-			stmt.setInt(7,prod.getId());
+			stmt.setObject(7, prod.getDisabledOnZoned());
+			stmt.setInt(8,prod.getId());
 			stmt.executeUpdate();
 		}
 		catch (SQLException ex) {

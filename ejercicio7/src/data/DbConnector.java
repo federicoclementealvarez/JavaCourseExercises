@@ -4,16 +4,14 @@ import java.sql.*;
 
 public class DbConnector {
 
-	private static DbConnector instanciaConector;
+	private static DbConnector instancia;
 	
 	private String driver="com.mysql.cj.jdbc.Driver";
 	private String host="localhost";
 	private String port="3306";
 	private String user="fedeuser";
 	private String password="Password123";
-	private String db="java_ejercicio_6";
-	//private String options="";
-	private String options="?useLegacyDatetimeCode=false&ServerTimezone=Asia/Hong_Kong";
+	private String db="java_ejercicio_7";
 	private int conectados=0;
 	private Connection conn=null;
 	
@@ -26,16 +24,16 @@ public class DbConnector {
 	}
 	
 	public static DbConnector getInstancia() {
-		if (instanciaConector == null) {
-			instanciaConector = new DbConnector();
+		if (instancia == null) {
+			instancia = new DbConnector();
 		}
-		return instanciaConector;
+		return instancia;
 	}
 	
 	public Connection getConn() {
 		try {
 			if(conn==null || conn.isClosed()) {
-				conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+db+options, user, password);
+				conn=DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+db, user, password);
 				conectados=0;
 			}
 		} catch (SQLException e) {
