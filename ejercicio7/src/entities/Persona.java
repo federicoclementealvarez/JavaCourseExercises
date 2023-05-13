@@ -13,6 +13,12 @@ public class Persona {
 	private boolean habilitado;
 	private HashMap<Integer, Rol> roles;
 	
+	
+	public Persona() {
+		this.roles=new HashMap<>();
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -60,10 +66,6 @@ public class Persona {
 	}
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
-	}
-	
-	public Persona() {
-		this.roles=new HashMap<>();
 	}
 	
 	public void addRol(Rol rolToBeAdded) {

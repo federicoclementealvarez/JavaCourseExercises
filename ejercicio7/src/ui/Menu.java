@@ -32,25 +32,35 @@ public class Menu {
 		case "list":
 			System.out.println(this.getAll());
 			break;
+			
 		case "find":
-			System.out.println(find());
+			System.out.println(this.getByDoc());
 			break;
+			
 		case "search":
 			System.out.println(this.getByAp());
 	
 			break;
+			
 		case "new":
 			System.out.println(this.add());
 			
 			break;
+			
 		case "edit":
-			
+			System.out.println(this.update());
 			break;
+			
 		case "delete":
+			this.deleteByDoc();
+			System.out.println("<Persona eliminada exitosamente>");
+			break;
 			
+		case "exit":
+			System.out.println("Terminando la aplicación...");
 			break;
-		default:
-			break;
+			
+		default: break;
 		}
 	}
 
@@ -62,6 +72,7 @@ public class Menu {
 		System.out.println("new\t\tcrea una nueva persona y asigna un rol existente");
 		System.out.println("edit\t\tbusca por tipo y nro de documento y actualiza todos los datos");
 		System.out.println("delete\t\tborra por tipo y nro de documento");
+		System.out.println("exit\t\tsalir de la aplicación");
 		System.out.println();
 		System.out.print("comando: ");
 		return s.nextLine();
@@ -86,7 +97,7 @@ public class Menu {
 		return(ctrlLogin.getAll());
 	}
 	
-	private Persona find() {
+	private Persona getByDoc() {
 		System.out.println();
 		Persona p=new Persona();
 		Documento d=new Documento();
@@ -108,7 +119,7 @@ public class Menu {
 	}
 	
 	private Persona add() {
-		return(this.persDataInput());
+		return(ctrlLogin.add(this.persDataInput()));
 	}
 	
 	private Persona persDataInput() {
@@ -145,8 +156,6 @@ public class Menu {
 		
 		this.rolDataInput(pers);
 		
-		ctrlLogin.add(pers);
-		
 		return(pers);
 	}
 	
@@ -159,9 +168,8 @@ public class Menu {
 			rol.setId(Integer.parseInt(s.nextLine()));
 			rol=ctrlLogin.getById(rol);
 			pers.addRol(rol);
-			ctrlLogin.add(pers,rol);
 			System.out.println();
-			System.out.println("¿Desea agregar otro rol?");
+			System.out.println("¿Desea agregar otro rol? S/N:");
 			selection=s.nextLine();
 			if (selection.equalsIgnoreCase("S")) {
 				option=true;
@@ -170,6 +178,17 @@ public class Menu {
 				option=false;
 			}
 		}while (option);
+	}
+	
+	private Persona update() {
+		int id = this.getByDoc().getId();
+		Persona pers = persDataInput();
+		pers.setId(id);
+		return(ctrlLogin.update(pers));
+	}
+	
+	private void deleteByDoc() {
+		ctrlLogin.delete(this.getByDoc());
 	}
 	
 }

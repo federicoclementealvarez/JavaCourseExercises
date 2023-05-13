@@ -8,12 +8,10 @@ import entities.*;
 public class Login {
 	private DataPersona dp;
 	private DataRol dr;
-	private DataRol_Persona drp;
 	
 	public Login() {
 		dp=new DataPersona();
 		dr= new DataRol();
-		drp = new DataRol_Persona();
 	}
 	
 	public Persona validate(Persona p) {
@@ -37,11 +35,15 @@ public class Login {
 		return(dr.getById(rol));
 	}
 	
-	public void add(Persona pers) {
-		dp.add(pers);
+	public Persona add(Persona pers) {
+		return(dp.add(pers));
 	}
 	
-	public void add(Persona pers, Rol rol) {
-		drp.add(pers, rol);
+	public Persona update(Persona p) {
+		return(dp.update(p));
+	}
+	
+	public void delete(Persona p) {
+		dp.delete(p);
 	}
 }
